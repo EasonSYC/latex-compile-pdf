@@ -1,0 +1,57 @@
+name: Compile LaTeX
+description: "Compile LaTeX"
+
+inputs:
+  working-directory:
+    description: The Working Directory
+    required: false
+    default: ${{ github.workspace }}
+
+  input-file:
+    description: Name of LaTeX File (with .tex extension)
+    required: false
+    default: main.tex
+
+  job-name:
+    description: Name of Compiled PDF File (without .pdf extension)
+    required: false
+    default: main
+
+  compiler:
+    description: LaTeX Compiler
+    required: false
+    default: latexmk
+
+  args:
+    description: Arguments 
+    required: false
+    default: -pdflatex -interaction=nonstopmode -file-line-error
+
+  cache:
+    description: Caching of Auxiliary Files
+    required: false
+    default: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Read File Paths to Cache
+      id: cache-paths
+      shell: bash
+      run: |
+        echo "paths<<EOF" >> $GITHUB_OUTPUT
+        sed 's|^|${{ inputs.working-directory }}/**/|' ./cache.file.list >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Cache LaTeX auxiliary files
+      if: inputs.cache == 'true'
+      uses: actions/cache@v5
+      with:
+        path: ${{ steps.cache-paths.outputs.paths }}
+        key: ${{ runner.os }}-latex-compile-${{ inputs.working-directory }}-${{ inputs.input-file }}
+
+    - name: Compile LaTeX File
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: ${{ inputs.compiler }} ${{ inputs.args }} -jobname=${{ inputs.job-name }} ${{ inputs.input-file }}
