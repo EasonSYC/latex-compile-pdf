@@ -68,22 +68,26 @@ runs:
 
     - name: Retrieve Version Information
       id: retrieve-version
+      if: inputs.version == 'true'
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: |
         echo "date=$(git log -1 --format=%cd --date=format:%Y%m%d)" >> $GITHUB_OUTPUT
         echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
     - name: Create Version File
-      shell: bash
       if: inputs.version == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: |
         echo "" >> version.tex
         echo "\renewcommand{\DATE}{${{ steps.retrieve-version.outputs.date }}}" >> version.tex
         echo "\renewcommand{\COMMITSHA}{${{ steps.retrieve-version.outputs.sha }}}" >> version.tex
 
     - name: Create Output Filename
-      shell: bash
       id: job-name-creation
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: |
         if ${{ inputs.version == 'true' }}; then
           echo "job-name=${{ inputs.job-name }}-${{ steps.retrieve-version.outputs.date }}-${{ steps.retrieve-version.outputs.sha }}" >> $GITHUB_OUTPUT
