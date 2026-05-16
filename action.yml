@@ -67,10 +67,11 @@ runs:
     - name: Restore Cached LaTeX auxiliary files
       id: restore-cache
       if: inputs.cache == 'true'
-      uses: actions/cache/restore@v5
+      uses: actions/cache@v5
       with:
         path: ${{ steps.cache-paths.outputs.paths }}
-        key: ${{ runner.os }}-latex-compile-${{ inputs.working-directory }}/${{ inputs.input-file }}
+        key: ${{ runner.os }}-latex-compile-${{ inputs.working-directory }}/${{ inputs.input-file }}-${{ github.run_id }}
+        restore-keys: ${{ runner.os }}-latex-compile-${{ inputs.working-directory }}/${{ inputs.input-file }}
 
     - name: Retrieve Version Information
       id: retrieve-version
@@ -105,13 +106,6 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: ${{ inputs.compiler }} ${{ inputs.args }} -jobname=${{ steps.job-name-creation.outputs.job-name }} ${{ inputs.input-file }}
-  
-    - name: Cache LaTeX auxiliary files
-      if: inputs.cache == 'true'
-      uses: actions/cache/save@v5
-      with:
-        path: ${{ steps.cache-paths.outputs.paths }}
-        key: ${{ steps.restore-cache.outputs.cache-primary-key }}
     
     - name: Upload PDF file
       uses: actions/upload-artifact@v7
