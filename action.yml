@@ -42,6 +42,11 @@ inputs:
     required: false
     default: true
 
+  job-name-version:
+    description: Include Version Information in Output PDF
+    required: false
+    default: true
+
 outputs:
   pdf-name:
     description: Name of PDF of Output
@@ -89,7 +94,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: |
-        if ${{ inputs.version == 'true' }}; then
+        if ${{ inputs.version == 'true' }} && ${{ inputs.job-name-version == 'true' }}; then
           echo "job-name=${{ inputs.job-name }}-${{ steps.retrieve-version.outputs.date }}-${{ steps.retrieve-version.outputs.sha }}" >> $GITHUB_OUTPUT
         else
           echo "job-name=${{ inputs.job-name }}" >> $GITHUB_OUTPUT
