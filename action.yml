@@ -84,7 +84,12 @@ runs:
     - name: Create Output Filename
       shell: bash
       id: job-name-creation
-      run: echo "job-name=${{ inputs.job-name }}-${{ steps.retrieve-version.outputs.sha }}-${{ steps.retrieve-version.outputs.date }}" >> $GITHUB_OUTPUT
+      run: |
+        if ${{ inputs.version == 'true' }}; then
+          echo "job-name=${{ inputs.job-name }}-${{ steps.retrieve-version.outputs.sha }}-${{ steps.retrieve-version.outputs.date }}" >> $GITHUB_OUTPUT
+        else
+          echo "job-name=${{ inputs.job-name }}" >> $GITHUB_OUTPUT
+        fi
       
 
     - name: Compile LaTeX File
