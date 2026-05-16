@@ -23,3 +23,5 @@
 *.bcf
 *.run.xml
 *.xdv
+*.log
+*.pdf
