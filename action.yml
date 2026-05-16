@@ -45,7 +45,7 @@ inputs:
 outputs:
   pdf-name:
     description: Name of PDF of Output
-    value: ${{. }}
+    value: ${{ steps.job-name-creation.outputs.job-name }}
 
 runs:
   using: "composite"
@@ -94,6 +94,7 @@ runs:
     
     - name: Upload PDF file
       uses: actions/upload-artifact@v7
+      if: inputs.upload == 'true'
       with:
         archive: false
         path: ${{ inputs.working-directory }}/${{ inputs.job-name }}.pdf
