@@ -70,8 +70,8 @@ runs:
       id: retrieve-version
       shell: bash
       run: |
-        echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
         echo "date=$(git log -1 --format=%cd --date=format:%Y%m%d)" >> $GITHUB_OUTPUT
+        echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
     - name: Create Version File
       shell: bash
@@ -86,7 +86,7 @@ runs:
       id: job-name-creation
       run: |
         if ${{ inputs.version == 'true' }}; then
-          echo "job-name=${{ inputs.job-name }}-${{ steps.retrieve-version.outputs.sha }}-${{ steps.retrieve-version.outputs.date }}" >> $GITHUB_OUTPUT
+          echo "job-name=${{ inputs.job-name }}-${{ steps.retrieve-version.outputs.date }}-${{ steps.retrieve-version.outputs.sha }}" >> $GITHUB_OUTPUT
         else
           echo "job-name=${{ inputs.job-name }}" >> $GITHUB_OUTPUT
         fi
