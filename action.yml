@@ -41,7 +41,7 @@ runs:
       shell: bash
       run: |
         echo "paths<<EOF" >> $GITHUB_OUTPUT
-        sed 's|^|${{ inputs.working-directory }}/**/|' ./cache.file.list >> $GITHUB_OUTPUT
+        sed 's|^|${{ inputs.working-directory }}/**/|' ${{ github.action_path }}/cache.file.list >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
 
     - name: Cache LaTeX auxiliary files
