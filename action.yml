@@ -51,6 +51,10 @@ outputs:
   pdf-name:
     description: Name of PDF of Output
     value: ${{ steps.job-name-creation.outputs.job-name }}
+  
+  artifact-id:
+    description: Artifact ID of PDF
+    value: ${{ steps.upload-pdf.outputs.artifact-id }}
 
 runs:
   using: "composite"
@@ -108,6 +112,7 @@ runs:
       run: ${{ inputs.compiler }} ${{ inputs.args }} -jobname=${{ steps.job-name-creation.outputs.job-name }} ${{ inputs.input-file }}
     
     - name: Upload PDF file
+      id: upload-pdf
       uses: actions/upload-artifact@v7
       if: inputs.upload == 'true'
       with:
