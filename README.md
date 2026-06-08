@@ -1,4 +1,4 @@
-# latex-style-pdf
+# latex-compile-pdf
 
 [![LaTeX Compile PDF](https://github.com/EasonSYC/latex-style/actions/workflows/compile-pdf.yml/badge.svg)](https://github.com/EasonSYC/latex-style/actions/workflows/compile-pdf.yml)
 
